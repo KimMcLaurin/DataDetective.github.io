@@ -125,14 +125,6 @@ from hr_data_staging;
 select distinct WorkLifeBalance
 from hr_data_staging;
 
--- Prove or disprove your theory before analysis, make sense
-
-select DISTINCT agegroup, hourlyrate, jobrole
-from hr_data_staging
-order by agegroup;
--- Female	65.8443
--- Male	65.8459
-
 
 
 
