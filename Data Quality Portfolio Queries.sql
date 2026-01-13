@@ -1,0 +1,138 @@
+-- Clean HR_Data - Used Excel to check for nulls and blanks
+
+
+select * 
+from hr_data;
+
+-------------------------------------------------------------------------------------------------------
+-- Create a staging table
+
+Create table hr_data_staging
+like hr_data;
+
+select *
+from hr_data_staging;
+
+insert hr_data_staging
+select *
+from hr_data;
+
+select *
+from hr_data_staging;
+
+----------------------------------------------------------------------------------------------------------
+-- -- Remove the 'weird characters' at the beginning of the first column header, due to encoding
+
+ALTER TABLE hr_data_staging
+CHANGE COLUMN `ï»¿EmpID` EmpID VARCHAR(255);
+
+select * 
+from hr_data_staging;
+
+----------------------------------------------------------------------------------------------------------
+
+-- Check for and remove any duplicates
+
+select count(empid)
+from hr_data_staging;
+
+select distinct count(empid)
+from hr_data_staging;
+
+---------------------------------------------------------------------------------------------------------
+
+-- Standardize the BusinessTravel data
+
+select *
+from hr_data_staging;
+
+select distinct * 
+from hr_data_staging
+where BusinessTravel like 'travelrarely';
+
+update hr_data_staging
+set businesstravel = 'Travel_Rarely'
+where businesstravel like 'TravelRarely';
+
+select *
+from hr_data_staging;
+
+---------------------------------------------------------------------------------------------------------
+
+-- Validate the AgeGroup data
+
+select Age, AgeGroup
+from hr_data_staging
+where AgeGroup = '18-25';
+
+select Age, AgeGroup
+from hr_data_staging
+where AgeGroup = '26-35';
+
+select Age, AgeGroup
+from hr_data_staging
+where AgeGroup = '36-45';
+
+select Age, AgeGroup
+from hr_data_staging
+where AgeGroup = '46-55';
+
+select Age, AgeGroup
+from hr_data_staging
+where AgeGroup = '55+';
+
+select *
+from hr_data_staging;
+
+----------------------------------------------------------------------------------------------------------
+
+-- Arrange Columns and order by EmpID
+
+select EmpID, Age, AgeGroup, Gender, MaritalStatus, Department, BusinessTravel, JobRole, HourlyRate, JobSatisfaction, PercentYearlySalaryHike, WorkLifeBalance
+from hr_data_staging
+order by EmpID;
+
+----------------------------------------------------------------------------------------------------------
+
+-- Check data types
+
+SELECT COLUMN_NAME, DATA_TYPE
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'hr_data_staging';
+
+select *
+from hr_data_staging;
+
+----------------------------------------------------------------------------------------------------------
+
+-- Check for outliers, anomalies
+
+select distinct JobRole, HourlyRate
+from hr_data_staging
+where department = 'Sales'
+order by HourlyRate;
+
+select distinct JobRole, HourlyRate
+from hr_data_staging
+where department = 'Human Resources'
+order by HourlyRate;
+
+select distinct JobRole, HourlyRate
+from hr_data_staging
+where department = 'Research & Development'
+order by HourlyRate;
+
+select empId, PercentYearlySalaryHike
+from hr_data_staging
+order by PercentYearlySalaryHike;
+
+---------------------------------------------------------------------------------------------------------
+
+-- Validate survey rules, ensure field constraints followed
+
+select distinct JobSatisfaction
+from hr_data_staging;
+
+select distinct WorkLifeBalance
+from hr_data_staging;
+
