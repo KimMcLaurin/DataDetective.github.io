@@ -1,8 +1,5 @@
 -- Clean HR_Data - Used Excel to check for nulls and blanks
--- I validate data by checking for missing values, duplicates, out-of-range values, incorrect formats, 
--- and inconsistencies across datasets. I use Excel's conditional formatting and formulas for early-stage checks.  I use   
--- SQL for deeper validation such as duplicate detection, referential integrity, and business rule validation. 
--- I re-validate before using the data.
+
 
 select * 
 from hr_data;
